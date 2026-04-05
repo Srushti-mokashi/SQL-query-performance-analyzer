@@ -3,21 +3,22 @@ const executionService = require('../services/execution.service');
 exports.executeQuery = async (req, res) => {
     try {
         const { query } = req.body;
+        console.log("Incoming query:", query);
         
         if (!query) {
-            return res.status(400).json({ success: false, error: 'Query is required' });
+            return res.json({ success: false, error: 'Query is required' });
         }
         
         const result = await executionService.executeAndLogQuery(query);
+        console.log("Service result:", result);
         
-        if (result.success) {
-            res.json(result);
-        } else {
-            res.status(400).json(result);
-        }
+        res.json({
+            success: result.success,
+            data: result
+        });
     } catch (error) {
         console.error("Execute Query Error:", error);
-        res.status(500).json({ success: false, error: 'Internal server error' });
+        res.json({ success: false, error: 'Internal server error' });
     }
 };
 
