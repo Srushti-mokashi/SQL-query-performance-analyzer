@@ -25,7 +25,10 @@ async function executeAndLogQuery(sqlString) {
     
     try {
         [rows] = await db.query(sqlString);
-        suggestion = await analyzerService.analyzeQuery(sqlString);
+        const analysisResult = await analyzerService.analyzeQuery(sqlString);
+        suggestion = analysisResult && analysisResult.suggestions.length > 0 
+            ? analysisResult.suggestions.join('; ') 
+            : "Query execution plan looks optimal.";
     } catch (error) {
         isSuccess = false;
         errorMessage = error.message;

@@ -15,7 +15,9 @@ exports.analyzeQuery = async (req, res) => {
             success: true,
             data: {
                 query: query,
-                analysis: analysis || 'No analysis available'
+                executionTime: analysis ? analysis.executionTime : "0 ms",
+                warnings: analysis ? analysis.warnings : [],
+                suggestions: analysis ? analysis.suggestions : []
             }
         });
     } catch (error) {

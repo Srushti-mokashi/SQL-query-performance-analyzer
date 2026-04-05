@@ -1,23 +1,44 @@
 const db = require('../config/db');
+const { performance } = require('perf_hooks');
 
 async function analyzeQuery(sqlString) {
-  if (!sqlString.toLowerCase().trim().startsWith('select')) {
-    return null;
-  }
+  const warnings = [];
+  const suggestions = [];
   
-  try {
-    const [explainResult] = await db.query(`EXPLAIN ${sqlString}`);
-    const mainPlan = explainResult[0];
-    
-    // Check for full table scan
-    if (mainPlan.type === 'ALL' && mainPlan.possible_keys === null) {
-      return `Optimization Tip: Full table scan detected on table '${mainPlan.table}'. Consider adding an INDEX to the columns used in your WHERE clause.`;
-    }
-    return "Query execution plan looks optimal.";
-  } catch (err) {
-    console.error("EXPLAIN analysis failed:", err.message);
-    return null; // Handle syntax errors gracefully
+  const upperQuery = sqlString.toUpperCase();
+
+  if (upperQuery.includes('SELECT *')) {
+    warnings.push("Avoid SELECT * in production queries");
+    suggestions.push("Specify only the columns you need");
   }
+
+  if (upperQuery.includes('WHERE')) {
+    suggestions.push("Consider adding indexes on filtered columns");
+  }
+
+  if (upperQuery.includes('ORDER BY')) {
+    suggestions.push("Ensure indexed columns are used for sorting");
+  }
+
+  if (upperQuery.includes('JOIN')) {
+    suggestions.push("Ensure join columns are indexed");
+  }
+
+  let executionTimeMs = 0;
+  try {
+    const start = performance.now();
+    await db.query(sqlString);
+    const end = performance.now();
+    executionTimeMs = Math.round(end - start);
+  } catch (err) {
+    console.error("Execution analysis failed:", err.message);
+  }
+
+  return {
+    executionTime: `${executionTimeMs} ms`,
+    warnings,
+    suggestions
+  };
 }
 
 module.exports = {
