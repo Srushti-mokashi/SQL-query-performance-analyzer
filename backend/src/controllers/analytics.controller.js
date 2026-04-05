@@ -11,14 +11,13 @@ exports.analyzeQuery = async (req, res) => {
         
         const analysis = await analyzerService.analyzeQuery(query);
         
+        if (analysis && analysis.error) {
+            return res.status(400).json(analysis);
+        }
+        
         res.json({
             success: true,
-            data: {
-                query: query,
-                executionTime: analysis ? analysis.executionTime : "0 ms",
-                warnings: analysis ? analysis.warnings : [],
-                suggestions: analysis ? analysis.suggestions : []
-            }
+            data: analysis
         });
     } catch (error) {
         console.error("Analyze Query Error:", error);
