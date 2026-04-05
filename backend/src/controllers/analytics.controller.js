@@ -1,4 +1,28 @@
 const db = require('../config/db');
+const analyzerService = require('../services/analyzer.service');
+
+exports.analyzeQuery = async (req, res) => {
+    try {
+        const { query } = req.body;
+        
+        if (!query) {
+            return res.status(400).json({ success: false, error: 'Query is required' });
+        }
+        
+        const analysis = await analyzerService.analyzeQuery(query);
+        
+        res.json({
+            success: true,
+            data: {
+                query: query,
+                analysis: analysis || 'No analysis available'
+            }
+        });
+    } catch (error) {
+        console.error("Analyze Query Error:", error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+};
 
 exports.getStats = async (req, res) => {
     try {
