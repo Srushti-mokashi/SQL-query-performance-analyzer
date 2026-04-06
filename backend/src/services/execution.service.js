@@ -9,7 +9,7 @@ async function logExecution(queryText, timeMs, status, errorMsg, isSlow, suggest
     try {
         const sql = `INSERT INTO query_logs 
           (query_text, execution_time_ms, status, error_message, is_slow, optimization_suggestion) 
-          VALUES (?, ?, ?, ?, ?, ?)`;
+          VALUES ($1, $2, $3, $4, $5, $6)`;
         await db.query(sql, [queryText, timeMs, status, errorMsg, isSlow, suggestion]);
     } catch (err) {
         console.error("Failed to log query execution:", err.message);
@@ -24,7 +24,8 @@ async function executeAndLogQuery(sqlString) {
     let suggestion = null;
     
     try {
-        [rows] = await db.query(sqlString);
+        const result = await db.query(sqlString);
+        rows = result.rows;
         const analysisResult = await analyzerService.analyzeQuery(sqlString);
         suggestion = analysisResult && analysisResult.suggestions.length > 0 
             ? analysisResult.suggestions.join('; ') 
@@ -55,16 +56,16 @@ async function executeAndLogQuery(sqlString) {
 
 async function getQueryHistory(page = 1, limit = 10) {
     const offset = (page - 1) * limit;
-    const [rows] = await db.query(
-        'SELECT * FROM query_logs ORDER BY executed_at DESC LIMIT ? OFFSET ?',
+    const historyResult = await db.query(
+        'SELECT * FROM query_logs ORDER BY executed_at DESC LIMIT $1 OFFSET $2',
         [parseInt(limit), parseInt(offset)]
     );
     // Get total count for pagination
-    const [totalRows] = await db.query('SELECT COUNT(*) as count FROM query_logs');
+    const countResult = await db.query('SELECT COUNT(*) as count FROM query_logs');
     
     return {
-        logs: rows,
-        total: totalRows[0].count,
+        logs: historyResult.rows,
+        total: countResult.rows[0].count,
         page: parseInt(page),
         limit: parseInt(limit)
     };

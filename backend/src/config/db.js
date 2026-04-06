@@ -1,24 +1,17 @@
-const mysql = require("mysql2/promise");
+const { Pool } = require("pg");
 require("dotenv").config();
 
-let pool;
-
-async function connectDB() {
-  try {
-    pool = mysql.createPool(process.env.DATABASE_URL);
-
-    // Test connection
-    const connection = await pool.getConnection();
-    console.log("Database connected successfully");
-    connection.release();
-
-  } catch (error) {
-    console.error("Database connection failed:", error.message);
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
   }
-}
+});
 
-connectDB();
+pool.connect()
+  .then(() => console.log("Connected to Neon PostgreSQL"))
+  .catch(err => console.error("Database connection error:", err));
 
 module.exports = {
-  query: (sql, params) => pool.query(sql, params)
+  query: (text, params) => pool.query(text, params)
 };

@@ -30,7 +30,7 @@ exports.getStats = async (req, res) => {
         const queries = `
             SELECT 
                 COUNT(*) as totalQueries,
-                SUM(CASE WHEN is_slow = 1 THEN 1 ELSE 0 END) as slowQueries,
+                SUM(CASE WHEN is_slow THEN 1 ELSE 0 END) as slowQueries,
                 SUM(CASE WHEN status = 'ERROR' THEN 1 ELSE 0 END) as errorQueries,
                 AVG(execution_time_ms) as avgExecutionTime
             FROM query_logs;
@@ -44,20 +44,19 @@ exports.getStats = async (req, res) => {
             LIMIT 50;
         `;
 
-        const [[statsRows], [timeseriesRows]] = await Promise.all([
-            db.query(queries),
-            db.query(recentPerformanceQueries)
-        ]);
+        const statsResult = await db.query(queries);
+        const timeseriesResult = await db.query(recentPerformanceQueries);
 
-        const stats = statsRows[0];
+        const stats = statsResult.rows[0];
+        const timeseriesRows = timeseriesResult.rows;
         
         res.json({
             success: true,
             data: {
-                totalQueries: stats.totalQueries || 0,
-                slowQueries: parseInt(stats.slowQueries || 0),
-                errorQueries: parseInt(stats.errorQueries || 0),
-                avgExecutionTime: parseFloat(stats.avgExecutionTime || 0).toFixed(2),
+                totalQueries: stats.totalqueries || 0,
+                slowQueries: parseInt(stats.slowqueries || 0),
+                errorQueries: parseInt(stats.errorqueries || 0),
+                avgExecutionTime: parseFloat(stats.avgexecutiontime || 0).toFixed(2),
                 timeseries: timeseriesRows.reverse() // Oldest to newest for frontend charts
             }
         });
