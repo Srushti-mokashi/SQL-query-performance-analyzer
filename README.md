@@ -4,6 +4,11 @@ SQL Query Performance Analyzer that identifies slow queries, analyzes execution 
 
 ## Live Demo
 
-Frontend: https://sql-query-performance-analyzer.vercel.app  
-Backend API: https://sql-query-performance-analyzer-project.onrender.com  
-Database: Neon PostgreSQL
+Frontend:
+https://sql-query-performance-analyzer.vercel.app
+
+Backend API:
+https://sql-query-performance-analyzer-project.onrender.com
+
+Health Check:
+https://sql-query-performance-analyzer-project.onrender.com/api/health
