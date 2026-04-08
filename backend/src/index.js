@@ -11,8 +11,8 @@ app.use(express.json());
 
 // Root route (added so Render URL works)
 app.get("/", (req, res) => {
-    res.send(`
-    <h2>SQL Query Performance Analyzer API 🚀</h2>
+  res.send(`
+    <h2>SQL Query Performance Analyzer API</h2>
     <p>Available Endpoints:</p>
     <ul>
       <li><b>GET /api/health</b> → Check API status</li>
@@ -31,12 +31,12 @@ app.use('/api/analytics', analyticsRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
-    res.json({
-        status: 'OK',
-        message: 'SQL Performance Analyzer API is running'
-    });
+  res.json({
+    status: 'OK',
+    message: 'SQL Performance Analyzer API is running'
+  });
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
