@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { 
   History as HistoryIcon, 
   Search, 
@@ -22,7 +22,7 @@ const History = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [filter, setFilter] = useState('ALL'); // ALL, SLOW, FAST, ERROR
 
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
       const limit = 10;
@@ -35,11 +35,11 @@ const History = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page]);
 
   useEffect(() => {
     fetchHistory();
-  }, [page]);
+  }, [fetchHistory]);
 
   const filteredHistory = history.filter(item => {
     if (filter === 'ALL') return true;

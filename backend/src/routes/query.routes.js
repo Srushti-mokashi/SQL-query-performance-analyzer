@@ -1,8 +1,12 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const queryController = require('../controllers/query.controller');
 
-router.post('/execute', queryController.executeQuery);
-router.get('/history', queryController.getHistory);
+const executionController = require("../controllers/execution.controller");
+
+// Run query + log performance
+router.post("/analyze", executionController.executeQuery);
+
+// Get query history
+router.get("/", executionController.getHistory);
 
 module.exports = router;

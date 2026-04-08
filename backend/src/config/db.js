@@ -8,10 +8,18 @@ const pool = new Pool({
   }
 });
 
+// Test connection safely
 pool.connect()
-  .then(() => console.log("Connected to Neon PostgreSQL"))
-  .catch(err => console.error("Database connection error:", err));
+  .then(() => {
+    console.log("Connected to Neon PostgreSQL");
+  })
+  .catch((err) => {
+    console.error("Database connection error:", err.message);
+  });
 
-module.exports = {
-  query: (text, params) => pool.query(text, params)
-};
+// Prevent app crash if DB disconnects
+pool.on("error", (err) => {
+  console.error("Unexpected database error:", err.message);
+});
+
+module.exports = pool;

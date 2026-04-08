@@ -22,9 +22,11 @@ import {
   Cell
 } from 'recharts';
 import { analyticsService } from '../services/api';
-import { Card, CardHeader, CardTitle, CardContent, Badge, cn } from '../components/ui';
+import { Card, CardHeader, CardTitle, CardContent, Badge } from '../components/ui';
+import { cn } from '../components/utils';
 
-const StatCard = ({ title, value, icon: Icon, description, trend, trendValue }) => (
+// eslint-disable-next-line no-unused-vars
+const StatCard = ({ title, value, Icon, description, trend, trendValue }) => (
   <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg border-primary/10">
     <CardContent className="p-6">
       <div className="flex items-center justify-between">
@@ -100,7 +102,7 @@ const Dashboard = () => {
         <StatCard 
           title="Total Queries" 
           value={stats?.totalQueries} 
-          icon={BarChart3} 
+          Icon={BarChart3} 
           description="Total queries executed"
           trend="up"
           trendValue="+12%"
@@ -108,13 +110,13 @@ const Dashboard = () => {
         <StatCard 
           title="Avg Latency" 
           value={`${stats?.avgExecutionTime}ms`} 
-          icon={Clock} 
+          Icon={Clock} 
           description="Avg response time"
         />
         <StatCard 
           title="Slow Queries" 
           value={stats?.slowQueries} 
-          icon={AlertTriangle} 
+          Icon={AlertTriangle} 
           description="Queries exceeding 100ms"
           trend="down"
           trendValue="-5%"
@@ -122,7 +124,7 @@ const Dashboard = () => {
         <StatCard 
           title="Error Rate" 
           value={stats?.errorQueries} 
-          icon={CheckCircle2} 
+          Icon={CheckCircle2} 
           description="Failed query executions"
         />
       </div>
@@ -136,7 +138,7 @@ const Dashboard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[400px]">
-             <ResponsiveContainer width="100%" height="100%" minHeight={300}>
+             <ResponsiveContainer width="100%" height={400}>
                <AreaChart data={chartData}>
                  <defs>
                    <linearGradient id="colorLatency" x1="0" y1="0" x2="0" y2="1">

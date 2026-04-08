@@ -14,9 +14,10 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { Button } from './ui';
-import { cn } from './ui';
+import { cn } from './utils';
 
-const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
+// eslint-disable-next-line no-unused-vars
+const SidebarItem = ({ Icon, label, active, onClick }) => (
   <button
     onClick={onClick}
     className={cn(
@@ -59,7 +60,7 @@ const Layout = ({ children, activePage, setActivePage }) => {
             {menuItems.map((item) => (
               <SidebarItem
                 key={item.id}
-                icon={item.icon}
+                Icon={item.icon}
                 label={item.label}
                 active={activePage === item.id}
                 onClick={() => {

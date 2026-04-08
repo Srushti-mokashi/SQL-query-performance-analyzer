@@ -14,7 +14,8 @@ import {
 import { systemService } from '../services/api';
 import { Card, CardHeader, CardTitle, CardContent, Button, Badge } from '../components/ui';
 
-const StatusItem = ({ label, status, icon: Icon }) => (
+// eslint-disable-next-line no-unused-vars
+const StatusItem = ({ label, status, Icon }) => (
   <div className="flex items-center justify-between p-4 bg-accent/10 border border-border/50 rounded-xl group hover:bg-accent/20 transition-all duration-200">
     <div className="flex items-center gap-4">
       <div className={`p-2 rounded-lg ${status === 'OK' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
@@ -82,12 +83,12 @@ const Status = () => {
           </CardHeader>
           <CardContent className="p-8 space-y-6 flex-1">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <StatusItem label="Performance API" status={health?.status === 'OK' ? 'OK' : 'DOWN'} icon={Server} />
-                <StatusItem label="Query Executor" status={health?.status === 'OK' ? 'OK' : 'DOWN'} icon={Zap} />
-                <StatusItem label="MySQL Database" status="OK" icon={Database} />
-                <StatusItem label="Analytics Engine" status="OK" icon={Activity} />
-                <StatusItem label="Cloud Infrastructure" status="OK" icon={Globe} />
-                <StatusItem label="Security Firewall" status="OK" icon={ShieldCheck} />
+                <StatusItem label="Performance API" status={health?.status === 'OK' ? 'OK' : 'DOWN'} Icon={Server} />
+                <StatusItem label="Query Executor" status={health?.status === 'OK' ? 'OK' : 'DOWN'} Icon={Zap} />
+                <StatusItem label="MySQL Database" status="OK" Icon={Database} />
+                <StatusItem label="Analytics Engine" status="OK" Icon={Activity} />
+                <StatusItem label="Cloud Infrastructure" status="OK" Icon={Globe} />
+                <StatusItem label="Security Firewall" status="OK" Icon={ShieldCheck} />
              </div>
           </CardContent>
         </Card>

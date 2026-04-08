@@ -1,26 +1,54 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
+/* ================================
+   Query Services
+================================ */
+
 export const queryService = {
-  execute: (query) => api.post('/queries/execute', { query }),
-  getHistory: (page = 1, limit = 20) => api.get(`/queries/history?page=${page}&limit=${limit}`),
+  // Execute query and log performance
+  execute: (query) =>
+    api.post("/queries/analyze", {
+      query,
+    }),
+
+  // Get query history
+  getHistory: (page = 1, limit = 20) =>
+    api.get("/queries", {
+      params: { page, limit },
+    }),
 };
+
+/* ================================
+   Analytics Services
+================================ */
 
 export const analyticsService = {
-  analyze: (query) => api.post('/analytics', { query }),
-  getStats: () => api.get('/analytics/stats'),
+  // Analyze query performance
+  analyze: (query) =>
+    api.post("/analytics", {
+      query,
+    }),
+
+  // Get dashboard statistics
+  getStats: () => api.get("/analytics/stats"),
 };
 
+/* ================================
+   System Health Services
+================================ */
+
 export const systemService = {
-  getHealth: () => api.get('/health'),
+  getHealth: () => api.get("/health"),
 };
 
 export default api;

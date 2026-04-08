@@ -1,71 +1,81 @@
-const db = require('../config/db');
-const { performance } = require('perf_hooks');
-const analyzerService = require('./analyzer.service');
+const db = require("../config/db");
+const { performance } = require("perf_hooks");
 
-const SLOW_QUERY_THRESHOLD = 2000; // 2 seconds
-
-// Background logging function
-async function logExecution(queryText, timeMs, status, errorMsg, isSlow, suggestion) {
-    try {
-        const sql = `INSERT INTO query_logs 
-          (query_text, execution_time_ms, status, error_message, is_slow, optimization_suggestion) 
-          VALUES ($1, $2, $3, $4, $5, $6)`;
-        await db.query(sql, [queryText, timeMs, status, errorMsg, isSlow, suggestion]);
-    } catch (err) {
-        console.error("Failed to log query execution:", err.message);
-    }
-}
+const SLOW_QUERY_THRESHOLD = 1000;
 
 async function executeAndLogQuery(sqlString) {
+
     const start = performance.now();
+
     let rows = [];
-    let isSuccess = true;
+    let status = "SUCCESS";
     let errorMessage = null;
-    let suggestion = null;
-    
+
     try {
+
         const result = await db.query(sqlString);
         rows = result.rows;
-        const analysisResult = await analyzerService.analyzeQuery(sqlString);
-        suggestion = analysisResult && analysisResult.suggestions.length > 0 
-            ? analysisResult.suggestions.join('; ') 
-            : "Query execution plan looks optimal.";
-    } catch (error) {
-        isSuccess = false;
-        errorMessage = error.message;
-    }
-    
-    const end = performance.now();
-    const executionTimeMs = (end - start).toFixed(2);
-    const isSlow = executionTimeMs > SLOW_QUERY_THRESHOLD;
 
-    // Async log the query to database
-    logExecution(sqlString, executionTimeMs, isSuccess ? 'SUCCESS' : 'ERROR', errorMessage, isSlow, suggestion);
+    } catch (error) {
+
+        status = "ERROR";
+        errorMessage = error.message;
+
+    }
+
+    const end = performance.now();
+
+    const executionTime = Math.round(end - start);
+
+    const isSlow = executionTime > SLOW_QUERY_THRESHOLD;
+
+    try {
+
+        await db.query(
+            `INSERT INTO query_logs 
+      (query_text, execution_time_ms, status, error_message, is_slow, executed_at)
+      VALUES ($1,$2,$3,$4,$5,NOW())`,
+            [
+                sqlString,
+                executionTime,
+                status,
+                errorMessage,
+                isSlow
+            ]
+        );
+
+    } catch (err) {
+        console.error("Logging failed:", err.message);
+    }
 
     return {
-        success: isSuccess,
-        data: isSuccess ? rows : null,
-        error: errorMessage,
+        success: status === "SUCCESS",
+        data: rows,
         metrics: {
-            executionTimeMs: parseFloat(executionTimeMs),
-            isSlow,
-            suggestion
-        }
+            executionTime,
+            isSlow
+        },
+        error: errorMessage
     };
 }
 
 async function getQueryHistory(page = 1, limit = 10) {
+
     const offset = (page - 1) * limit;
-    const historyResult = await db.query(
-        'SELECT * FROM query_logs ORDER BY executed_at DESC LIMIT $1 OFFSET $2',
-        [parseInt(limit), parseInt(offset)]
+
+    const logs = await db.query(
+        `SELECT *
+     FROM query_logs
+     ORDER BY executed_at DESC
+     LIMIT $1 OFFSET $2`,
+        [limit, offset]
     );
-    // Get total count for pagination
-    const countResult = await db.query('SELECT COUNT(*) as count FROM query_logs');
-    
+
+    const total = await db.query(`SELECT COUNT(*) FROM query_logs`);
+
     return {
-        logs: historyResult.rows,
-        total: countResult.rows[0].count,
+        logs: logs.rows,
+        total: parseInt(total.rows[0].count),
         page: parseInt(page),
         limit: parseInt(limit)
     };
