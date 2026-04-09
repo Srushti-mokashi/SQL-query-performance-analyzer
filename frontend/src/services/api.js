@@ -6,49 +6,75 @@ const API_BASE_URL =
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    "Content-Type": "application/json",
-  },
+    "Content-Type": "application/json"
+  }
 });
 
 /* ================================
-   Query Services
+   QUERY SERVICES
 ================================ */
 
 export const queryService = {
-  // Execute query and log performance
-  execute: (query) =>
-    api.post("/queries/analyze", {
-      query,
-    }),
+
+  // Run SQL query + log execution
+  execute: async (query) => {
+
+    const response = await api.post("/queries/analyze", {
+      query: query
+    });
+
+    return response;
+  },
 
   // Get query history
-  getHistory: (page = 1, limit = 20) =>
-    api.get("/queries", {
-      params: { page, limit },
-    }),
+  getHistory: async (page = 1, limit = 20) => {
+
+    const response = await api.get("/queries", {
+      params: { page, limit }
+    });
+
+    return response;
+  }
+
 };
 
 /* ================================
-   Analytics Services
+   ANALYTICS SERVICES
 ================================ */
 
 export const analyticsService = {
-  // Analyze query performance
-  analyze: (query) =>
-    api.post("/analytics", {
-      query,
-    }),
 
-  // Get dashboard statistics
-  getStats: () => api.get("/analytics/stats"),
+  analyze: async (query) => {
+
+    const response = await api.post("/analytics", {
+      query: query
+    });
+
+    return response;
+  },
+
+  getStats: async () => {
+
+    const response = await api.get("/analytics/stats");
+
+    return response;
+  }
+
 };
 
 /* ================================
-   System Health Services
+   SYSTEM HEALTH
 ================================ */
 
 export const systemService = {
-  getHealth: () => api.get("/health"),
+
+  getHealth: async () => {
+
+    const response = await api.get("/health");
+
+    return response;
+  }
+
 };
 
 export default api;
