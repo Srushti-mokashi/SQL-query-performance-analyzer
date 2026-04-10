@@ -13,10 +13,13 @@ const PORT = process.env.PORT || 5000;
 // Allow frontend requests
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // local frontend
-      "https://sql-query-performance-analyzer.vercel.app" // deployed frontend
-    ],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (origin.startsWith("http://localhost") || origin.endsWith("vercel.app") || origin === "https://sql-query-performance-analyzer.vercel.app") {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
   })
