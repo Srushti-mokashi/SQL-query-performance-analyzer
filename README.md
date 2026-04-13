@@ -131,55 +131,6 @@ SQL-Performance-Analyzer
 
 ![Dashboard](screenshots/force-refresh.png)
 
-### Dashboard Overview
-
-<img src="images/dashboard.png" width="900">
-
-The main dashboard provides a summary of database activity and performance metrics.
-
-### Query Performance Charts
-
-<img src="images/charts.png" width="900">
-
-Charts visualize query execution statistics and performance trends.
-
-### Query Counts
-
-<img src="images/counts.png" width="900">
-
-Displays the number of queries executed over time.
-
-### Query Analyzer
-
-<img src="images/query-analyzer.png" width="900">
-
-Allows users to analyze SQL queries and detect potential performance issues.
-
-### Query History
-
-<img src="images/query-history.png" width="900">
-
-Tracks previously executed queries for analysis and debugging.
-
-### System Status
-
-<img src="images/system-status.png" width="900">
-
-Displays the health and status of the database system.
-
-### Force Refresh Feature
-
-<img src="images/force-refresh.png" width="900">
-
-Allows users to manually refresh dashboard data.
-
-## Theme Toggle
-
-Light Mode / Dark Mode
-<img src="images/themebutton.png" width="900"> <img src="images/themebutton2.png" width="900">
-
-Users can switch between themes for better dashboard usability.
-
 
 ## Real-World Use Cases
 
