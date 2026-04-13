@@ -125,7 +125,7 @@ SQL-Performance-Analyzer
 
 ### Theme Button
 ![Dashboard](images/themebutton.png)
-![Dashboard](images/themebutton2png)
+![Dashboard](images/themebutton2.png)
 
 ### Force Refresh
 
