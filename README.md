@@ -101,35 +101,35 @@ SQL-Performance-Analyzer
 
 ### dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](images/dashboard.png)
 
 ### counts
 
-![Dashboard](screenshots/counts.png)
+![Dashboard](images/counts.png)
 
 ### Charts
 
-![Dashboard](screenshots/Charts.png)
+![Dashboard](images/Charts.png)
 
 ### query analyzer
 
-![Dashboard](screenshots/query-analyzer.png)
+![Dashboard](images/query-analyzer.png)
 
 ### query History
 
-![Dashboard](screenshots/query-history.png)
+![Dashboard](images/query-history.png)
 
 ### System Status
 
-![Dashboard](screenshots/system-status.png)
+![Dashboard](images/system-status.png)
 
 ### Theme Button
-![Dashboard](screenshots/themebutton.png)
-![Dashboard](screenshots/themebutton2png)
+![Dashboard](images/themebutton.png)
+![Dashboard](images/themebutton2png)
 
 ### Force Refresh
 
-![Dashboard](screenshots/force-refresh.png)
+![Dashboard](images/force-refresh.png)
 
 
 ## Real-World Use Cases
